@@ -29,11 +29,22 @@ def abrir_archivo():
         c += 1
 
 
+def busq_repo(vec, proyecto):
+    existe = False
+    for i in range(len(vec)):
+        if vec[i].repositorio == proyecto.repositorio:
+            existe = True
+
+    return existe
+
+
 def cargar_registros(vec):
     # Abrimos el archivo
     m = open("proyectos.csv", mode="rt", encoding="utf8")
     filename = "proyectos.csv"
     c = 0
+    regs_cargados = 0
+    regs_omitidos = 0
     # Recorro el archivo
     for linea in m:
         if c > 0:
@@ -51,13 +62,34 @@ def cargar_registros(vec):
 
                 # Creo el objeto
                 proyecto = Proyecto(nombre, repo, fecha_actualizacion, lenguaje, likes, tags, url)
-                # Agrego
-                vec.append(proyecto)
+                # Agregamos el objeto al vector de registros
+                if busq_repo(vec, proyecto) or proyecto.lenguaje == " ":
+                    regs_omitidos += 1
+                else:
+                    add_in_order(vec, proyecto)
+                    regs_cargados += 1
 
         c += 1
+    m.close()
+    return vec, regs_cargados, regs_omitidos
 
-    return vec
 
+def add_in_order(vec, proyecto):
+    n = len(vec)
+    pos = n
+    izq, der = 0, n - 1
+    while izq <= der:
+        c = (izq + der) // 2
+        if vec[c].repositorio == proyecto.repositorio:
+            pos = c
+            break
+        if proyecto.repositorio < vec[c].repositorio:
+            der = c - 1
+        else:
+            izq = c + 1
+    if izq > der:
+        pos = izq
+    vec[pos:pos] = [proyecto]
 
 
 def principal():
@@ -74,13 +106,11 @@ def principal():
     # Iniciamos el ciclo
     while opcion != 8:
         if opcion == 1:
-            vec = cargar_registros(vec)
+            vec, regs_cargados, regs_omitidos = cargar_registros(vec)
             for v in vec:
                 print(v)
-
-            print(len(vec))
-
-
+            print(regs_cargados)
+            print(regs_omitidos)
         elif opcion == 2:
             pass
         elif opcion == 3:
