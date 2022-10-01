@@ -51,7 +51,7 @@ def cargar_registros(vec):
     regs_omitidos = 0
     # Recorro el archivo
     for linea in m:
-        if c > 0 :
+        if c > 0:
             # En este punto tenemos en la variable txt_line, un array compuesto por los campos que necesitaremos para poder cargarlo a los objetos
             txt_line = linea.split('|')
             # Almaceno los valores
@@ -279,6 +279,7 @@ def popularidad(vec):
 
 
 def mostrar_matriz(mat):
+    #vec_meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
     for i in range(len(mat)):
         fila = " | "
         for j in range(len(mat[i])):
@@ -338,15 +339,27 @@ def save_populars(matriz):
             #Si la celda es mayor a cero
             if matriz[f][c] > 0:
                 #Generar Instancia de Clase para luego guardarla en el archivo binario
-                mes = matriz
+                mes = f + 1
+                estrellas = c + 1
+                #print('El mes es:',mes)
+                #print('La cantidad de estrellas es:',estrellas)
+                #print(cant_proyectos)
                 cant_proyectos = matriz[f][c]
+                #Generamos el objeto
+                reg = Registro(mes,estrellas,cant_proyectos)
+                #Guardar los registros en el archivo binario
+                pickle.dump(reg,mf)
 
+    #Cierro el archivo
+    mf.close()
 
 
 def principal():
     print('*' * 21, 'Gestión de Proyectos', '*' * 21)
     # Vector
     vec = []
+    #Matriz
+    matriz = [[]]
     # Solicitamos una opcion al usuario
     mostrar_menu()
     opcion = int(input('Ingrese la opcion elegida: '))
@@ -362,11 +375,11 @@ def principal():
             vec, regs_cargados, regs_omitidos = cargar_registros(vec)
             print('-' * 15, '>La cantidad de registros cargados en nuestro vector es:', regs_cargados)
             print('-' * 15, '>La cantidad de registros omitidos de la carga es:', regs_omitidos)
-            """
+
             for v in vec:
                 print(v)
             print()
-            """
+
         elif opcion == 2:
             if not (vec != []):
                 print('*', 'Psss, Primero pasa por la opcion 1, sino queres que el programa EXPLOTE')
@@ -401,7 +414,12 @@ def principal():
                 search_project_up(vec)
                 print()
         elif opcion == 6:
-            pass
+            if not(matriz != [[]]):
+                print('*', 'Psss, Primero pasa por la opcion 4, sino queres que el programa EXPLOTE')
+            else:
+                print()
+                save_populars(matriz)
+                print()
         elif opcion == 7:
             pass
 
