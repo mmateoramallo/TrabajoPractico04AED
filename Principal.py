@@ -354,15 +354,34 @@ def save_populars(matriz):
     #Cierro el archivo
     mf.close()
 
+def mostrar_registro(reg):
+    print('Mes:', reg.mes, 'Cantidad de estrellas:', reg.estrellas, 'Cantidad de proyectos:', reg.cant_proyectos)
+
 #Mostrar archivo: Leer el contenido del archivo binario y volver a generar la matriz. Mostrarla en formato de tabla.
 def leer_file():
 
-    print('*' * 21, 'Grabando los datos del archivo binario', '*' * 21)
+    print('*' * 21, 'Leyendo los datos del archivo binario', '*' * 21)
 
     #Abrir archivo
-    mf = open('matriz.dat', 'wb')
-    #Recorremos el archivo
+    mf = open('matriz.dat', 'rb')
+    #Instanciamos nuevamente la matriz
+    matriz_dat_bin = [[0] * 5 for f in range(12)]
 
+    #Recorremos el archivo
+    t = os.path.getsize('matriz.dat')
+    while mf.tell() < t:
+        reg = pickle.load(mf)
+        mostrar_registro(reg)
+        #Tendriamos que generar nuevamente la matriz a partir de los datos que obtendremos
+        for f in range(len(matriz_dat_bin)):
+            for c in range(len(matriz_dat_bin[f])):
+                pass
+    #Mostrar la matriz
+    mostrar_matriz(matriz_dat_bin)
+
+
+    #Cerramos el archivo
+    mf.close()
 
 
 
@@ -433,7 +452,9 @@ def principal():
                 save_populars(matriz)
                 print()
         elif opcion == 7:
-            pass
+            leer_file()
+        elif opcion == 8:
+            print('Adios...')
 
         # Solicitamos nuevamente la opcion al usuario
         mostrar_menu()
