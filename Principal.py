@@ -1,9 +1,7 @@
 from Proyecto import Proyecto
-import random
 import pickle
 import os
 import os.path
-import io
 from datetime import *
 from Registro_Punto_4 import Registro
 
