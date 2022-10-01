@@ -279,9 +279,10 @@ def popularidad(vec):
 
 
 def mostrar_matriz(mat):
-    #vec_meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    vec_meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+    print('   |1★| 2★| 3★| 4★| 5★|')
     for i in range(len(mat)):
-        fila = " | "
+        fila = str(vec_meses[i])+" | "
         for j in range(len(mat[i])):
             fila += str(mat[i][j]) + " | "
         print(fila)
@@ -352,6 +353,17 @@ def save_populars(matriz):
 
     #Cierro el archivo
     mf.close()
+
+#Mostrar archivo: Leer el contenido del archivo binario y volver a generar la matriz. Mostrarla en formato de tabla.
+def leer_file():
+
+    print('*' * 21, 'Grabando los datos del archivo binario', '*' * 21)
+
+    #Abrir archivo
+    mf = open('matriz.dat', 'wb')
+    #Recorremos el archivo
+
+
 
 
 def principal():
