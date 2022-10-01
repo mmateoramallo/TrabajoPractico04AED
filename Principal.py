@@ -51,7 +51,7 @@ def cargar_registros(vec):
     regs_omitidos = 0
     # Recorro el archivo
     for linea in m:
-        if c > 0 and c <= 5:
+        if c > 0 :
             # En este punto tenemos en la variable txt_line, un array compuesto por los campos que necesitaremos para poder cargarlo a los objetos
             txt_line = linea.split('|')
             # Almaceno los valores
@@ -75,6 +75,9 @@ def cargar_registros(vec):
                     regs_cargados += 1
 
         c += 1
+    #print(c-regs_cargados)
+    #Los registros omitidos van a ser los registros que no se logran cargar, es decir el total seria c(contador de iteraciones que se realizan sobre el vector, iterando linea a linea el archivo, menos la cantidad de registros que se caragan correctamente, dado esto nosotros para obtener los regs_omitidos, restaremos ambas cantidades y obtendremos el numero correcto, pudiendo asi corregir un error a la hora de mostrar los regs_omitidos
+    regs_omitidos = (c - regs_cargados)
     m.close()
     return vec, regs_cargados, regs_omitidos
 
@@ -359,9 +362,11 @@ def principal():
             vec, regs_cargados, regs_omitidos = cargar_registros(vec)
             print('-' * 15, '>La cantidad de registros cargados en nuestro vector es:', regs_cargados)
             print('-' * 15, '>La cantidad de registros omitidos de la carga es:', regs_omitidos)
+            """
             for v in vec:
                 print(v)
             print()
+            """
         elif opcion == 2:
             if not (vec != []):
                 print('*', 'Psss, Primero pasa por la opcion 1, sino queres que el programa EXPLOTE')
