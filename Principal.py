@@ -33,6 +33,14 @@ def busq_repo(vec, proyecto):
     return existe
 
 
+def tiene_lenguaje(proyecto):
+    tiene_len = False
+    if proyecto.lenguaje != "":
+        tiene_len = True
+
+    return tiene_len
+
+
 def cargar_registros(vec):
     # Abrimos el archivo
     m = abrir_archivo()
@@ -57,10 +65,11 @@ def cargar_registros(vec):
 
                 # Creo el objeto
                 proyecto = Proyecto(nombre, repo, fecha_actualizacion, lenguaje, likes, tags, url)
-                # Agregamos el objeto al vector de registros
-                if busq_repo(vec, proyecto) or proyecto.lenguaje == " ":
+                # No deben repetirse los repositorios | Las líneas que tengan el lenguaje en blanco no deben ser procesadas.
+                if busq_repo(vec, proyecto) or proyecto.lenguaje == "":
                     regs_omitidos += 1
                 else:
+                    # Agregamos el objeto al vector de registros
                     add_in_order(vec, proyecto)
                     regs_cargados += 1
 
@@ -196,19 +205,47 @@ def filtrar_tag(vec):
 
 # A partir del vector determinar la cantidad de proyectos por cada lenguaje de programación. Mostrar los lenguajes de programación y su cantidad ordenados de mayor a menor por cantidad.
 def lenguajes(vec):
-    # Abrir el archivo
-    m = abrir_archivo()
     # Vector para almacenar los lenguajes de programacion
     vec_leng = []
     vec_cont = []
-    # Recorro el vec
-    for v in range(len(vec)):
-        for g in range(len(vec_leng)):
-            # Veo si el lenguaje del v.lenguaje esta en el vec_leng?
-            if vec[v].lenguaje == vec_leng[g]:
-                pass
-            else:
-                vec_leng.append(vec[v].lenguaje)
+    # Por cada lenguaje, del vector, lo busco en el vector de lenguaje, y si existe incrementamos el vec_cont +1, en caso de que no lo agregamos al vec_leng, y hacemos append de 1 al vec_cont
+    for i in range(len(vec)):
+        # Preguntamos si el lenguaje existe en el vector de lenguajes
+        existe, pos_leng = buscar_lenguaje(vec_leng, vec[i])
+        if existe:
+            # Si existe accedemos a la posicion i y incrementamos en 1
+            vec_cont[pos_leng] += 1
+        else:
+            # Si no existe lo agregamos al vec_leng, y agregamos 1 al vec_cont
+            vec_leng.append(vec[i].lenguaje)
+            vec_cont.append(1)
+
+    return vec_cont, vec_leng
+
+
+def buscar_lenguaje(vec_len, i):
+    pos_leng = None
+    existe = False
+    for j in range(len(vec_len)):
+        if vec_len[j] == i.lenguaje:
+            pos_leng = j
+            existe = True
+
+    return existe, pos_leng
+
+
+def sort_leng(vec_leng, vec_cont):
+    pos_l = None
+    n = len(vec_cont)
+    for i in range(n - 1):
+        ordenado = True
+        for j in range(n - i - 1):
+            if vec_cont[j] > vec_cont[j + 1]:
+                ordenado = False
+                vec_cont[j], vec_cont[j + 1] = vec_cont[j + 1], vec_cont[j]
+                vec_leng[j], vec_leng[j + 1] = vec_leng[j + 1], vec_leng[j]
+                if ordenado:
+                    break
 
 
 def principal():
@@ -226,15 +263,26 @@ def principal():
     # Iniciamos el ciclo
     while opcion != 8:
         if opcion == 1:
+            print()
             vec, regs_cargados, regs_omitidos = cargar_registros(vec)
             print('-' * 15, '>La cantidad de registros cargados en nuestro vector es:', regs_cargados)
             print('-' * 15, '>La cantidad de registros omitidos de la carga es:', regs_omitidos)
             for v in vec:
                 print(v)
+            print()
         elif opcion == 2:
+            print()
             filtrar_tag(vec)
+            print()
         elif opcion == 3:
-            pass
+            print()
+            vec_cont, vec_leng = lenguajes(vec)
+            # print(vec_leng)
+            # print(vec_cont)
+            sort_leng(vec_leng, vec_cont)
+            for j in range(len(vec_cont)):
+                print('-' * 15, '>Hay ', str(vec_cont[j]), 'proyectos escritos en el lenguaje', vec_leng[j])
+            print()
         elif opcion == 4:
             pass
         elif opcion == 5:
