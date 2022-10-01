@@ -148,7 +148,8 @@ def cant_estrellas(proyecto):
 
 
 def display_project(proyecto, estrellas):
-    print('-' * 11, '>Repositorio:', proyecto.repositorio, 'Fecha De Actualizacion:', str(proyecto.fecha_actualizacion), 'Cantidad De estrellas:', str(estrellas))
+    print('-' * 11, '>Repositorio:', proyecto.repositorio, 'Fecha De Actualizacion:', str(proyecto.fecha_actualizacion),
+          'Cantidad De estrellas:', str(estrellas))
 
 
 def filtrar_tag(vec):
@@ -156,19 +157,44 @@ def filtrar_tag(vec):
     m = abrir_archivo()
     # Solicitamos por teclado el tag al usuario
     tag = validar_tag()
+    # Consultamos al usuario si desea almacenar el listado de registros en un archivo de texto
+    save_it = input('Desea almacenar el listado que se le brindara, en un archivo de texto (S/N): ').lower()
+    # En caso de que se decida almacenarlo, inicializamos un vector vacio
+    vec_file = []
     # Ciclo for para buscar proyectos que coincidan con el tag provisto por el usuario
     for i in vec:
         if tag in i.tags:
             # Mostramos la cantidad de estrellas del proyecto segun la cantidad de likes del mismo
             estrella_proyecto = cant_estrellas(i)
             # Una vez que determinamos la cantidad de estrellas que tiene1 el proyecto lo mostramos
-            display_project(i,estrella_proyecto)
+            display_project(i, estrella_proyecto)
+            if save_it == "s":
+                vec_file.append(i)
+
+    # Creamos el fileobject
+    mf = open("proyectos_filtrados.csv", mode="wt", encoding="utf8")
+    # Almacenamos los datos en el archivo
+    main_line = 'nombre_usuario|repositorio|descripcion|fecha_actualizacion|lenguaje|estrellas|tags|url\n'
+    mf.write(main_line)
+    for v in range(len(vec_file)):
+        # Itero cada objeto que tengo en el registro de objetos Y Obtengo los valores de los objetos del vector
+        nombre = vec_file[v].nombre_usuario
+        rep = vec_file[v].repositorio
+        fecha = vec_file[v].fecha_actualizacion
+        leng = vec_file[v].lenguaje
+        likes = vec_file[v].likes
+        tags = vec_file[v].tags
+        url = vec_file[v].url
+        # Los escribo en el archivo
+        txt_line = nombre + '|' + rep + '|' + fecha + '|' + leng + '|' + likes + '|' + tags + '|' + url
+        mf.write(txt_line)
 
     # Cerrar el archivo
     m.close()
+    mf.close()
 
 
-# Punto 3
+# A partir del vector determinar la cantidad de proyectos por cada lenguaje de programación. Mostrar los lenguajes de programación y su cantidad ordenados de mayor a menor por cantidad.
 def lenguajes(vec):
     # Abrir el archivo
     m = abrir_archivo()
@@ -201,13 +227,10 @@ def principal():
     while opcion != 8:
         if opcion == 1:
             vec, regs_cargados, regs_omitidos = cargar_registros(vec)
-            """
-            for v in vec:
-                print(v)
-                print(type(v.likes))
-            """
             print('-' * 15, '>La cantidad de registros cargados en nuestro vector es:', regs_cargados)
             print('-' * 15, '>La cantidad de registros omitidos de la carga es:', regs_omitidos)
+            for v in vec:
+                print(v)
         elif opcion == 2:
             filtrar_tag(vec)
         elif opcion == 3:
