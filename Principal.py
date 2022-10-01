@@ -117,20 +117,22 @@ def convert_likes(proyecto):
         nro_final = nros_adelante + nros_detras + '00'
         likes = int(nro_final)
     else:
-        likes_str = (proyecto.likes)
-        # Se tiene que eliminar la K y agregar los tres ceros
-        for a in range(len(likes_str)):
-            if "k" in likes_str:
-                pos_k = a
-                nros_adelante = likes_str[:pos_k]
-                likes_str = nros_adelante + '000'
-                likes = int(likes_str)
+        likes = proyecto.likes
+        for i in range(len(likes)):
+            if likes[i] == "k":
+                pos_k = i
+                nros_delante = likes[:pos_k]
+                nros = nros_delante + '000'
+                likes = int(nros)
+
     return likes
 
 
 def cant_estrellas(proyecto):
     estrellas = 0
+
     likes = convert_likes(proyecto)
+
     if 0 <= likes <= 10000:
         estrellas = 1
     elif 10001 <= likes <= 20000:
@@ -145,6 +147,10 @@ def cant_estrellas(proyecto):
     return estrellas
 
 
+def display_project(proyecto, estrellas):
+    print('-' * 11, '>Repositorio:', proyecto.repositorio, 'Fecha De Actualizacion:', str(proyecto.fecha_actualizacion), 'Cantidad De estrellas:', str(estrellas))
+
+
 def filtrar_tag(vec):
     # Abrir el archivo
     m = abrir_archivo()
@@ -156,7 +162,7 @@ def filtrar_tag(vec):
             # Mostramos la cantidad de estrellas del proyecto segun la cantidad de likes del mismo
             estrella_proyecto = cant_estrellas(i)
             # Una vez que determinamos la cantidad de estrellas que tiene1 el proyecto lo mostramos
-            i.show_with_tag(estrella_proyecto)
+            display_project(i,estrella_proyecto)
 
     # Cerrar el archivo
     m.close()
@@ -204,13 +210,6 @@ def principal():
             print('-' * 15, '>La cantidad de registros omitidos de la carga es:', regs_omitidos)
         elif opcion == 2:
             filtrar_tag(vec)
-            """
-            for v in vec:
-                print(v)
-                lk = (convert_likes(v))
-                # print(lk)
-                # print(type(lk))
-            """
         elif opcion == 3:
             pass
         elif opcion == 4:

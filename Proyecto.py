@@ -11,6 +11,5 @@ class Proyecto:
     def __str__(self):
         return f"Nombre Del Usuario {self.nombre_usuario}, repositorio {self.repositorio}, fecha {str(self.fecha_actualizacion)}, lenguaje de desarrollo {self.lenguaje}, likes {str(self.likes)}, tags {str(self.tags)}, url: {str(self.url)}"
 
-    def show_with_tag(self, estrellas):
-        return f"EL proyecto se encuentra en el repositorio: {str(self.repositorio)}, su fecha de actualizacion es {str(self.fecha_actualizacion)}, su cantidad de estrellas es{estrellas}"
+
 
