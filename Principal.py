@@ -242,7 +242,7 @@ def sort_leng(vec_leng, vec_cont):
     for i in range(n - 1):
         ordenado = True
         for j in range(n - i - 1):
-            if vec_cont[j] > vec_cont[j + 1]:
+            if vec_cont[j] < vec_cont[j + 1]:
                 ordenado = False
                 vec_cont[j], vec_cont[j + 1] = vec_cont[j + 1], vec_cont[j]
                 vec_leng[j], vec_leng[j + 1] = vec_leng[j + 1], vec_leng[j]
@@ -382,6 +382,12 @@ def leer_file():
     mf.close()
 
 
+def calc_total(mes, matriz):
+    total = 0
+    for f in range(len(matriz)):
+        pass
+
+
 
 def principal():
     print('*' * 21, 'Gestión de Proyectos', '*' * 21)
@@ -434,6 +440,9 @@ def principal():
             else:
                 print()
                 matriz = popularidad(vec)
+                #Total de proyectos actualizados
+                m = int(input('Ingrese el mes a buscar todos los proyectos actualizados'))
+                total = calc_total(mes, matriz)
                 print()
         elif opcion == 5:
             if not (vec != []):
