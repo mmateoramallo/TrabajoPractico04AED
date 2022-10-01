@@ -369,11 +369,11 @@ def leer_file():
     t = os.path.getsize('matriz.dat')
     while mf.tell() < t:
         reg = pickle.load(mf)
-        mostrar_registro(reg)
+        #mostrar_registro(reg)
         #Tendriamos que generar nuevamente la matriz a partir de los datos que obtendremos
         for f in range(len(matriz_dat_bin)):
             for c in range(len(matriz_dat_bin[f])):
-                pass
+                matriz_dat_bin[reg.mes -1][reg.estrellas -1] = reg.cant_proyectos
     #Mostrar la matriz
     mostrar_matriz(matriz_dat_bin)
 
@@ -404,11 +404,11 @@ def principal():
             vec, regs_cargados, regs_omitidos = cargar_registros(vec)
             print('-' * 15, '>La cantidad de registros cargados en nuestro vector es:', regs_cargados)
             print('-' * 15, '>La cantidad de registros omitidos de la carga es:', regs_omitidos)
-
+            """
             for v in vec:
                 print(v)
             print()
-
+            """
         elif opcion == 2:
             if not (vec != []):
                 print('*', 'Psss, Primero pasa por la opcion 1, sino queres que el programa EXPLOTE')
