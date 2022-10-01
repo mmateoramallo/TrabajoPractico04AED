@@ -4,7 +4,8 @@ import pickle
 import os
 import os.path
 import io
-
+from datetime import *
+from Registro_Punto_4 import Registro
 
 def mostrar_menu():
     print("1. Cargar Datos")
@@ -50,7 +51,7 @@ def cargar_registros(vec):
     regs_omitidos = 0
     # Recorro el archivo
     for linea in m:
-        if c > 0:
+        if c > 0 and c <= 5:
             # En este punto tenemos en la variable txt_line, un array compuesto por los campos que necesitaremos para poder cargarlo a los objetos
             txt_line = linea.split('|')
             # Almaceno los valores
@@ -271,6 +272,8 @@ def popularidad(vec):
     # Mostrar Matriz
     mostrar_matriz(matriz)
 
+    return matriz
+
 
 def mostrar_matriz(mat):
     for i in range(len(mat)):
@@ -278,6 +281,63 @@ def mostrar_matriz(mat):
         for j in range(len(mat[i])):
             fila += str(mat[i][j]) + " | "
         print(fila)
+
+
+# Buscar proyecto actualizado: A partir del vector, buscar un repositorio con el nombre rep, siendo rep  un valor ingresado por teclado. Si existe mostrar sus datos y permitir reemplazar la URL del proyecto que se ingrese por teclado  y cambiar la fecha de actualización por la fecha actual (la fecha no se carga por teclado, investigue la manera de obtener la fecha actual y formatearla de igual manera en la que se encuentra en el archivo. Si no existe indicar con un mensaje de error.
+def sol_rep():
+    rep = input('Ingrese el nombre del repositorio a buscar: ')
+    while not rep:
+        rep = input('Ingrese el nombre del repositorio CORRECTAMENTE!!: ')
+
+    return rep
+
+
+def buscar_rep(rep, vec):
+    existe = False
+    pos = None
+    for i in range(len(vec)):
+        if vec[i].repositorio == rep:
+            existe = True
+            pos = i
+    return existe, pos
+
+
+def search_project_up(vec):
+    rep = sol_rep()
+
+    # Buscamos el repositorio en el vector
+    existe, pos = buscar_rep(rep, vec)
+    # En caso de que exista, mostramos sus datos
+    if existe:
+        print('*' * 21, 'Datos Del Proyecto', '*' * 21)
+        print(vec[pos])
+        # Reemplazar la URL del proyecto que se ingrese por teclado  y cambiar la fecha de actualización por la fecha actual
+        url = input('Ingrese la URL a modificar del proyecto: ')
+        # Modificamos la url
+        vec[pos].url = url
+        # Modificamos la fecha, a la fecha actual
+        now = datetime.now()
+        format = now.strftime('%Y-%m-%d')
+        # print(format)
+        vec[pos].fecha_actualizacion = format
+        # Mostramos el registro Actualizado
+        print('*' * 21, 'Datos Del Proyecto Actualizado', '*' * 21)
+        print(vec[pos])
+
+
+# Guardar populares: A partir de la matriz generada en el punto 4, almacenar su contenido (sólo los elementos mayores a cero) en un archivo binario en el que cada elemento sea un registro en el que se representen los campos: mes del año.estrellas (El rango indicado en el punto 2).cantidad de proyectos.
+def save_populars(matriz):
+    print('*' * 21, 'Grabando los datos en el archivo binario', '*' * 21)
+    mf = open('matriz.dat', 'wb')
+    # un recorrido por filas
+    for f in range(len(matriz)):
+        for c in range(len(matriz[f])):
+            #Si la celda es mayor a cero
+            if matriz[f][c] > 0:
+                #Generar Instancia de Clase para luego guardarla en el archivo binario
+                mes = matriz
+                cant_proyectos = matriz[f][c]
+
 
 
 def principal():
@@ -303,22 +363,38 @@ def principal():
                 print(v)
             print()
         elif opcion == 2:
-            print()
-            filtrar_tag(vec)
-            print()
+            if not (vec != []):
+                print('*', 'Psss, Primero pasa por la opcion 1, sino queres que el programa EXPLOTE')
+            else:
+                print()
+                filtrar_tag(vec)
+                print()
         elif opcion == 3:
-            print()
-            vec_cont, vec_leng = lenguajes(vec)
-            # print(vec_leng)
-            # print(vec_cont)
-            sort_leng(vec_leng, vec_cont)
-            for j in range(len(vec_cont)):
-                print('-' * 15, '>Hay ', str(vec_cont[j]), 'proyectos escritos en el lenguaje', vec_leng[j])
-            print()
+            if not (vec != []):
+                print('*', 'Psss, Primero pasa por la opcion 1, sino queres que el programa EXPLOTE')
+            else:
+                print()
+                vec_cont, vec_leng = lenguajes(vec)
+                # print(vec_leng)
+                # print(vec_cont)
+                sort_leng(vec_leng, vec_cont)
+                for j in range(len(vec_cont)):
+                    print('-' * 15, '>Hay ', str(vec_cont[j]), 'proyectos escritos en el lenguaje', vec_leng[j])
+                print()
         elif opcion == 4:
-            popularidad(vec)
+            if not (vec != []):
+                print('*', 'Psss, Primero pasa por la opcion 1, sino queres que el programa EXPLOTE')
+            else:
+                print()
+                matriz = popularidad(vec)
+                print()
         elif opcion == 5:
-            pass
+            if not (vec != []):
+                print('*', 'Psss, Primero pasa por la opcion 1, sino queres que el programa EXPLOTE')
+            else:
+                print()
+                search_project_up(vec)
+                print()
         elif opcion == 6:
             pass
         elif opcion == 7:
