@@ -248,6 +248,38 @@ def sort_leng(vec_leng, vec_cont):
                     break
 
 
+# Popularidad: Se quiere conocer los meses en los que se actualizan los proyectos, de acuerdo a la cantidad de estrellas. Para ello se pide, a partir del vector, generar una matriz donde cada fila sea un mes de actualización (no importa de qué año corresponde)  y cada columna una cantidad de estrellas. Cada celda deberá contener la cantidad de proyectos que tengan ese mes de actualización y esa cantidad de estrellas. Las estrellas representan los rangos de likes indicados en el punto 2.
+
+def popularidad(vec):
+    # Generamos la matriz
+    matriz = [[0] * 5 for f in range(12)]
+    # Recorro el vector
+    for i in vec:
+        fecha = i.fecha_actualizacion
+
+        mes = fecha[5] + fecha[6]
+
+        if mes[0] != '0':
+            mes = fecha[5] + fecha[6]
+        else:
+            mes = fecha[6]
+
+        mes = int(mes)
+
+        matriz[mes - 1][cant_estrellas(i) - 1] += 1
+
+    # Mostrar Matriz
+    mostrar_matriz(matriz)
+
+
+def mostrar_matriz(mat):
+    for i in range(len(mat)):
+        fila = " | "
+        for j in range(len(mat[i])):
+            fila += str(mat[i][j]) + " | "
+        print(fila)
+
+
 def principal():
     print('*' * 21, 'Gestión de Proyectos', '*' * 21)
     # Vector
@@ -284,7 +316,7 @@ def principal():
                 print('-' * 15, '>Hay ', str(vec_cont[j]), 'proyectos escritos en el lenguaje', vec_leng[j])
             print()
         elif opcion == 4:
-            pass
+            popularidad(vec)
         elif opcion == 5:
             pass
         elif opcion == 6:
